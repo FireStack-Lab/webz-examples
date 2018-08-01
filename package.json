@@ -26,7 +26,8 @@
   "dependencies": {
     "dva": "^2.1.0",
     "umi": "^1.0.0-0",
-    "umi-plugin-dva": "^0.1.5"
+    "umi-plugin-dva": "^0.1.5",
+    "webz.js": "github:FireStack-Lab/webz.js"
   },
   "devDependencies": {
     "eslint": "^4.14.0",

@@ -7,9 +7,9 @@
 .content {
   flex: 1;
   display: flex;
+  padding: 16px 16px 16px;
 }
 
 .main {
-  padding: 0 8px;
-  flex: 1 0 auto;
+  flex: 1 1 auto;
 }

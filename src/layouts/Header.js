@@ -9,27 +9,19 @@ function Header({ location }) {
           <Icon type="home" />Home
         </Link>
       </Menu.Item>
-      <Menu.Item key="/users">
-        <Link to="/users">
-          <Icon type="bars" />Users
+      <Menu.Item key="/node">
+        <Link to="/node">
+          <Icon type="bars" />node
         </Link>
       </Menu.Item>
-      <Menu.Item key="/umi">
-        <a
-          href="https://github.com/umijs/umi"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          umi
+      <Menu.Item key="/docs">
+        <a href="//scilla-lang.org" target="_blank" rel="noopener noreferrer">
+          Docs
         </a>
       </Menu.Item>
-      <Menu.Item key="/dva">
-        <a
-          href="https://github.com/dvajs/dva"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          dva
+      <Menu.Item key="/IDE">
+        <a href="//ide.zilliqa.com/" target="_blank" rel="noopener noreferrer">
+          IDE
         </a>
       </Menu.Item>
       <Menu.Item key="/404">

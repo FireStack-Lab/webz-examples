@@ -1970,9 +1970,13 @@ bser@^2.0.0:
   dependencies:
     node-int64 "^0.4.0"
 
-bsert@0.0.3, bsert@~0.0.3:
+bsert@0.0.3:
   version "0.0.3"
   resolved "https://registry.npmjs.org/bsert/-/bsert-0.0.3.tgz#2d6df637ceee6dedd3e4ebd870c7935e23e9e15e"
+
+bsert@~0.0.3:
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/bsert/-/bsert-0.0.4.tgz#2b3c236357923f0625f948802a5f9b66c0383d0b"
 
 buffer-from@^1.0.0:
   version "1.1.1"
@@ -10033,7 +10037,7 @@ websocket-extensions@>=0.1.1:
 
 "webz.js@github:FireStack-Lab/webz.js":
   version "0.0.1"
-  resolved "https://codeload.github.com/FireStack-Lab/webz.js/tar.gz/0d25a5ec677f48edc9b672ebf02d3f75b6f732ac"
+  resolved "https://codeload.github.com/FireStack-Lab/webz.js/tar.gz/756c244d4fe7aea03f3a49fdfc43eef786fdac20"
   dependencies:
     assert "^1.4.1"
     babel-runtime "^6.26.0"

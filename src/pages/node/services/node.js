@@ -33,6 +33,11 @@ class ZilService {
     return result
   }
 
+  getAddressFromPublicKey = async pubKey => {
+    const result = this.Webz.util.getAddressFromPublicKey(pubKey)
+    return result
+  }
+
   txnJson = async (prvKey, txnObject) => {
     const result = await this.Webz.util.createTransactionJson(prvKey, txnObject)
     return result
@@ -72,6 +77,18 @@ class ZilService {
   // get transaction
   getTransaction = async txHash => {
     const result = await this.node().getTransaction({ txHash })
+    return result
+  }
+
+  // get txBlock
+  getTxBlock = async blockNumber => {
+    const result = await this.node().getTxBlock({ blockNumber })
+    return result
+  }
+
+  // get dsBlock
+  getDsBlock = async blockNumber => {
+    const result = await this.node().getDsBlock({ blockNumber })
     return result
   }
 

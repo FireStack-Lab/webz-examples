@@ -21,8 +21,14 @@ export default {
       balance: null,
       nonce: null
     },
+    txnInfo: {},
+    dsBlock: {},
+    txBlock: {},
     loadingNode: false,
     loadingWallet: false,
+    loadingTxnInfo: false,
+    loadingDsBlock: false,
+    loadingTxBlock: false,
     total: null,
     page: null
   },
@@ -93,6 +99,91 @@ export default {
         type: 'updateState',
         payload: {
           loadingWallet: false
+        }
+      })
+    },
+    *getTxnInfo({ payload }, { call, put }) {
+      // console.log(payload)
+      yield put({
+        type: 'updateState',
+        payload: {
+          loadingTxnInfo: true
+        }
+      })
+      const { txHash } = payload
+
+      const getTransaction = yield call(webz.getTransaction, txHash)
+
+      if (getTransaction) {
+        const { senderPubKey } = getTransaction
+
+        const fromAddr =
+          senderPubKey !== undefined
+            ? yield call(webz.getAddressFromPublicKey, senderPubKey)
+            : null
+        yield put({
+          type: 'updateState',
+          payload: {
+            txnInfo: { ...getTransaction, fromAddr }
+          }
+        })
+      }
+      yield put({
+        type: 'updateState',
+        payload: {
+          loadingTxnInfo: false
+        }
+      })
+    },
+    *getTxBlockInfo({ payload }, { call, put }) {
+      // console.log(payload)
+      yield put({
+        type: 'updateState',
+        payload: {
+          loadingTxBlock: true
+        }
+      })
+      const { blockNumber } = payload
+
+      const getTxBlock = yield call(webz.getTxBlock, blockNumber)
+
+      if (getTxBlock) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            txBlock: { ...getTxBlock }
+          }
+        })
+      }
+      yield put({
+        type: 'updateState',
+        payload: {
+          loadingTxBlock: false
+        }
+      })
+    },
+    *getDsBlockInfo({ payload }, { call, put }) {
+      yield put({
+        type: 'updateState',
+        payload: {
+          loadingDsBlock: true
+        }
+      })
+      const { blockNumber } = payload
+
+      const getDsBlock = yield call(webz.getDsBlock, blockNumber)
+      if (getDsBlock) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            dsBlock: { ...getDsBlock }
+          }
+        })
+      }
+      yield put({
+        type: 'updateState',
+        payload: {
+          loadingDsBlock: false
         }
       })
     }

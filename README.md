@@ -10,6 +10,11 @@ examples for webz.js
 
 access http://localhost:8000/node from modern browser(eg.chrome)
 
+## Features
+
+1.  a usable explorer
+2.  a usable wallet
+
 ## this example is using Umi.js and dva.js
 
 Umi.js is a lightweight framework for react apps

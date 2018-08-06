@@ -9,6 +9,25 @@ class ZilService {
   // initialize WebzNode
   init = nodeUrl => new Webz({ nodeUrl })
 
+  // aesEncrypt
+  aesEncrypt = (data, key, iv) => {
+    const result = this.Webz.util.aes.encipher(
+      Buffer.alloc(data.toString().length, data.toString()),
+      Buffer.alloc(32, key),
+      Buffer.alloc(16, iv)
+    )
+    return result
+  }
+  // aesEncrypt
+  aesDecrypt = (data, key, iv) => {
+    const result = this.Webz.util.aes.decipher(
+      data,
+      Buffer.alloc(32, key),
+      Buffer.alloc(16, iv)
+    )
+    return result
+  }
+
   // generate private key
   prvKey = () => {
     const result = this.Webz.util.generatePrivateKey()

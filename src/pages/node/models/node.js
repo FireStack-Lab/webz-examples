@@ -1,4 +1,4 @@
-import Webz from '../services/node'
+import Webz from '../../../services/webz'
 
 const apis = {
   testNet: 'https://api-scilla.zilliqa.com',
@@ -35,14 +35,6 @@ export default {
   reducers: {
     updateState(state, { payload }) {
       return { ...state, ...payload }
-    },
-    save(
-      state,
-      {
-        payload: { data: list, total, page }
-      }
-    ) {
-      return { ...state, list, total, page }
     }
   },
   effects: {

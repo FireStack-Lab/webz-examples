@@ -24,6 +24,7 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^1.0.0-alpha.12",
     "dva": "^2.1.0",
     "umi": "^1.0.0-0",
     "umi-plugin-dva": "^0.1.5",

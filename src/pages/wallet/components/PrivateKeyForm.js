@@ -1,7 +1,5 @@
-import { Input, Form, Button } from 'antd'
-
+import { Button, Input, Form } from 'antd'
 const FormItem = Form.Item
-
 const tailFormItemLayout = {
   wrapperCol: {
     xs: {
@@ -15,22 +13,22 @@ const tailFormItemLayout = {
   }
 }
 
-const TxBlockForm = ({ form, handleSubmit }) => (
+const PrvKeyForm = ({ form, handleSubmit }) => (
   <Form>
     <FormItem>
-      {form.getFieldDecorator('TxBlockNumber', {
+      {form.getFieldDecorator('PrvKey', {
         rules: [
         {
             required: true,
-            message: 'Please enter correct TxBlockNumber!'
+            message: 'Please enter correct Private Key!'
         },
         {
           validator: (rule, value, callback) => {
-            if (value.match(/^[0-9]/)) {
+            if (value.match(/^[0-9a-fA-F]{64}$/)) {
               callback()
                 return true
             }
-            callback('TxBlockNumber should be numbers!')
+            callback('Private Key should 64 chars long!')
               return false
           }
         }
@@ -38,7 +36,7 @@ const TxBlockForm = ({ form, handleSubmit }) => (
       })(
         <Input
           style={{ maxWidth: '100%' }}
-          placeholder="Please enter correct TxBlockNumber"
+          placeholder="Please enter correct Private Key"
         />
       )}
     </FormItem>
@@ -46,8 +44,13 @@ const TxBlockForm = ({ form, handleSubmit }) => (
       <Button
         type="primary"
         onClick={() => {
-          const value = form.getFieldValue('TxBlockNumber')
-          handleSubmit(value)
+          form.validateFields(['PrvKey'], (err, data) => {
+            if (err === null) {
+              const value = form.getFieldValue('PrvKey')
+              console.log(value)
+              handleSubmit(value)
+            }
+          })
         }}
       >
         Submit
@@ -55,6 +58,6 @@ const TxBlockForm = ({ form, handleSubmit }) => (
     </FormItem>
   </Form>
 )
-const WrappedTxBlockForm = Form.create()(TxBlockForm)
+const WrappedPrvKeyForm = Form.create()(PrvKeyForm)
 
-export default WrappedTxBlockForm
+export default WrappedPrvKeyForm

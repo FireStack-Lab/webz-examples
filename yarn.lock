@@ -3742,12 +3742,24 @@ electron-to-chromium@^1.2.7:
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.3.52.tgz#d2d9f1270ba4a3b967b831c40ef71fb4d9ab5ce0"
 
 electron-to-chromium@^1.3.47:
-  version "1.3.55"
-  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.3.55.tgz#f150e10b20b77d9d41afcca312efe0c3b1a7fdce"
+  version "1.3.56"
+  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.3.56.tgz#aad1420d23e9dd8cd2fc2bc53f4928adcf85f02f"
 
-elliptic@^6.0.0, elliptic@^6.2.3, elliptic@^6.4.0, elliptic@~6.4.0:
+elliptic@^6.0.0:
   version "6.4.0"
   resolved "https://registry.npmjs.org/elliptic/-/elliptic-6.4.0.tgz#cac9af8762c85836187003c8dfe193e5e2eae5df"
+  dependencies:
+    bn.js "^4.4.0"
+    brorand "^1.0.1"
+    hash.js "^1.0.0"
+    hmac-drbg "^1.0.0"
+    inherits "^2.0.1"
+    minimalistic-assert "^1.0.0"
+    minimalistic-crypto-utils "^1.0.0"
+
+elliptic@^6.2.3, elliptic@^6.4.0, elliptic@~6.4.0:
+  version "6.4.1"
+  resolved "https://registry.npmjs.org/elliptic/-/elliptic-6.4.1.tgz#c2d0b7776911b86722c632c3c06c60f2f819939a"
   dependencies:
     bn.js "^4.4.0"
     brorand "^1.0.1"
@@ -10844,7 +10856,7 @@ websocket-extensions@>=0.1.1:
 
 "webz.js@github:FireStack-Lab/webz.js":
   version "0.0.1"
-  resolved "https://codeload.github.com/FireStack-Lab/webz.js/tar.gz/a1fe244bd9e18956bac2969c3709072d44cfd472"
+  resolved "https://codeload.github.com/FireStack-Lab/webz.js/tar.gz/3970a86ae2d1ee640c4f1d31483c559a792e3c97"
   dependencies:
     assert "^1.4.1"
     babel-preset-env "^1.7.0"

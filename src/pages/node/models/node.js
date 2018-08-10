@@ -1,10 +1,12 @@
 import Webz from '../../../services/webz'
+import { createAction } from '../../../utils'
 
 const apis = {
+  testRpc: 'http://127.0.0.1:4200',
   testNet: 'https://api-scilla.zilliqa.com',
   main: 'https://lookupv2.zilliqa.com/'
 }
-const apiUrl = apis.testNet
+const apiUrl = apis.testRpc
 
 const webz = new Webz(apiUrl)
 
@@ -18,6 +20,7 @@ export default {
       networkId: null
     },
     walletInfo: {
+      address: null,
       balance: null,
       nonce: null
     },
@@ -83,7 +86,7 @@ export default {
         yield put({
           type: 'updateState',
           payload: {
-            walletInfo: { ...getBalance }
+            walletInfo: { ...getBalance, address }
           }
         })
       }
@@ -178,6 +181,21 @@ export default {
           loadingDsBlock: false
         }
       })
+    },
+    *resetPageObject(_, { put }) {
+      yield put(
+        createAction('updateState')({
+          walletInfo: { Balance: null, nonce: null },
+          txnInfo: {},
+          dsBlock: {},
+          txBlock: {},
+          loadingNode: false,
+          loadingWallet: false,
+          loadingTxnInfo: false,
+          loadingDsBlock: false,
+          loadingTxBlock: false
+        })
+      )
     }
   },
   subscriptions: {

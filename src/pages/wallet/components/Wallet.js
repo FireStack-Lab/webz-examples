@@ -1,8 +1,10 @@
 import { Component } from 'react'
 import { List, Card, Button, Drawer, Icon, Avatar, Divider } from 'antd'
 import { connect } from 'dva'
+import { createAction } from '../../../utils'
 import NewWallet from './NewWallet'
 import ImportWallet from './ImportWallet'
+import Transaction from './Transaction'
 
 class Wallet extends Component {
   state = {
@@ -26,6 +28,7 @@ class Wallet extends Component {
     })
   }
   onTransactionButton = () => {
+    this.props.dispatch(createAction('wallet/resetPageObject')())
     this.setState({
       modalType: 'makeTransaction',
       modalVisible: true,
@@ -45,7 +48,8 @@ class Wallet extends Component {
     }, 2000)
   }
   handleCancel = () => {
-    console.log('Clicked cancel button')
+    this.props.dispatch(createAction('node/resetPageObject')())
+    this.props.dispatch(createAction('wallet/resetPageObject')())
     this.setState({
       modalType: null,
       modalTitle: null,
@@ -62,6 +66,14 @@ class Wallet extends Component {
         break
       case 'importWallet':
         result = <ImportWallet onCancel={onCancel} onSumbmit={onSubmit} />
+        break
+      case 'makeTransaction':
+        result = (
+          <Transaction
+            onCancel={onCancel}
+            onSubmit={() => console.log('transaction')}
+          />
+        )
         break
       default:
         result = null
@@ -159,8 +171,8 @@ class Wallet extends Component {
             <List.Item
               key={item.address}
               actions={[
-                <IconText type="wallet" text="156" />,
-                <IconText type="check-circle-o" text="156" />
+                <IconText type="wallet" text={item.balance} />,
+                <IconText type="check-circle-o" text={item.nonce} />
               ]}
               extra={
                 <img

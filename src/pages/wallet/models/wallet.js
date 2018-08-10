@@ -3,10 +3,11 @@ import { createAction } from '../../../utils'
 import { readObject, writeObject } from '../../../utils/storage'
 
 const apis = {
+  testRpc: 'http://127.0.0.1:4200',
   testNet: 'https://api-scilla.zilliqa.com',
   main: 'https://lookupv2.zilliqa.com/'
 }
-const apiUrl = apis.testNet
+const apiUrl = apis.testRpc
 
 const webz = new Webz(apiUrl)
 
@@ -17,6 +18,7 @@ export default {
   state: {
     localWallets: [],
     confirmWallet: {},
+    confirmTransaction: {},
     loadingCreateWallet: false
   },
   reducers: {
@@ -38,8 +40,12 @@ export default {
 
         if (getKey.match(walletTrim)) {
           const walletObject = readObject(getKey)
+          const walletBalance = yield call(webz.getBalance, getKey.slice(15))
+          const walletObjectToLocal = Object.assign({}, walletObject, {
+            ...walletBalance
+          })
           // console.log(Buffer.from(walletObject.prvKey))
-          walletList.push(walletObject)
+          walletList.push(walletObjectToLocal)
         }
       }
       if (walletList.length > 0)
@@ -84,6 +90,7 @@ export default {
         walletPassWord,
         0
       )
+
       const saveLocalWalletObject = {
         prvKey: encryptPrvKey,
         pubKey,
@@ -94,17 +101,65 @@ export default {
       const walletKey = `webz_wallet_id_${saveLocalWalletObject.address}`
       yield call(writeObject, walletKey, saveLocalWalletObject)
       yield put({ type: 'getLocalWallets' })
-      //
-      // const outputAes = yield call(
-      //   webz.aesDecrypt,
-      //   Buffer.alloc(
-      //     saveLocalWalletObject.keyLength,
-      //     saveLocalWalletObject.prvKey,
-      //     'utf-8'
-      //   ),
-      //   walletPassWord,
-      //   0
-      // )
+    },
+    *toConfirmTransaction({ payload }, { call, put }) {
+      yield put(
+        createAction('updateState')({
+          confirmTransaction: { ...payload }
+        })
+      )
+    },
+    *makeTransaction({ payload }, { call, put }) {
+      // console.log(payload)
+      const { from, psw, ...txnDetails } = payload
+      const walletKey = `webz_wallet_id_${from}`
+
+      const localWallet = yield call(readObject, walletKey)
+      const localWalletBuffer = Buffer.from(localWallet.prvKey)
+      // console.log(localWalletBuffer)
+      const outputAes = yield call(webz.aesDecrypt, localWalletBuffer, psw, 0)
+      let prvKey
+      if (outputAes) {
+        prvKey = outputAes.toString()
+        // update nonce to double check
+        const balanceInfo = yield call(webz.getBalance, from)
+        const checkedTxnDetails = {
+          ...txnDetails,
+          nonce: balanceInfo.nonce
+          // should be edited to below after kaya upgrated
+          // nonce: balanceInfo.nonce + 1
+        }
+        // console.log(prvKey)
+        const txnJson = yield call(webz.txnJson, prvKey, checkedTxnDetails)
+        yield put(createAction('doneTransaction')({ txnJson, from }))
+      }
+    },
+
+    *doneTransaction({ payload }, { call, put }) {
+      const { txnJson, from } = payload
+      // console.log(txnJson)
+      const txnId = yield call(webz.createTransaction, txnJson)
+      // console.log(txnId)
+      if (txnId) {
+        const txnDate = new Date()
+        const { result } = txnId
+        if (typeof result === 'string' && result.match(/^[0-9a-fA-F]{64}$/)) {
+          const newTxnObject = Object.assign({}, txnJson, {
+            txnId: result,
+            from,
+            txnCreateTime: txnDate,
+            txnUpdateTime: txnDate,
+            txnStatus: 'pending'
+          })
+          // console.log({ txnId, txnJson })
+
+          yield call(
+            writeObject,
+            `transaction_id_${txnId.result}`,
+            newTxnObject
+          )
+        }
+      }
     },
     *createWallet(_, { call, put }) {
       const prvKey = yield call(webz.prvKey)
@@ -122,34 +177,16 @@ export default {
           createAction('updateState')({ confirmWallet: saveNewWalletObject })
         )
       }
+    },
+    *resetPageObject(_, { put }) {
+      yield put(
+        createAction('updateState')({
+          confirmWallet: {},
+          confirmTransaction: {},
+          loadingCreateWallet: false
+        })
+      )
     }
-    // *getWalletInfo({ payload }, { call, put }) {
-    //   // console.log(payload)
-    //   yield put({
-    //     type: 'updateState',
-    //     payload: {
-    //       loadingWallet: true
-    //     }
-    //   })
-    //   const { address } = payload
-    //
-    //   const getBalance = yield call(webz.getBalance, address)
-    //
-    //   if (getBalance) {
-    //     yield put({
-    //       type: 'updateState',
-    //       payload: {
-    //         walletInfo: { ...getBalance }
-    //       }
-    //     })
-    //   }
-    //   yield put({
-    //     type: 'updateState',
-    //     payload: {
-    //       loadingWallet: false
-    //     }
-    //   })
-    // }
   },
   subscriptions: {
     setup({ dispatch, history }) {

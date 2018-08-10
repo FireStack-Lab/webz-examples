@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import { Button, Input } from 'antd'
 import { connect } from 'dva'
 import WrappedPrvKeyForm from './PrivateKeyForm'
 import ConfirmWallet from './ConfirmWallet'

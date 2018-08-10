@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { Button, Input } from 'antd'
+import { Button } from 'antd'
 import { connect } from 'dva'
 import ConfirmWallet from './ConfirmWallet'
 import { createAction } from '../../../utils'

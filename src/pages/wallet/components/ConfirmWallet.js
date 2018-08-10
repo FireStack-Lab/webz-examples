@@ -10,7 +10,7 @@ const ConfirmWalletForm = ({
   confirmWallet: { prvKey, pubKey, address }
 }) => {
   return (
-    <Form>
+    <Form style={{ paddingBottom: 32 }}>
       <div style={{ marginTop: 16 }}>
         <h3>Private Key</h3>
         <Input size="large" value={prvKey} disabled />
@@ -127,13 +127,14 @@ const ConfirmWalletForm = ({
         </Button>
         <Button
           onClick={() => {
-            form.validateFields(['walletName'], (err, data) => {
-              if (err === null) {
-                const walletName = form.getFieldValue('walletName')
-                const walletPassword = form.getFieldValue('walletPassword')
-                onSubmit({ walletName, walletPassword })
+            form.validateFields(
+              ['walletName', 'walletPassWord', 'walletPassWord2'],
+              (err, data) => {
+                if (err === null) {
+                  onSubmit(data)
+                }
               }
-            })
+            )
           }}
           type="primary"
           // disabled={buttonState}
@@ -150,10 +151,11 @@ class ConfirmWallet extends Component {
   state = {
     // buttonState: true
   }
-  onSubmitForm = ({ walletName }) => {
+  onSubmitForm = ({ walletName, walletPassWord }) => {
     const walletObject = {
       ...this.props.confirmWallet,
-      walletName
+      walletName,
+      walletPassWord
     }
     this.props.saveToLocalWallets(walletObject)
     this.props.onCancel()

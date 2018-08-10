@@ -18,20 +18,20 @@ const PrvKeyForm = ({ form, handleSubmit }) => (
     <FormItem>
       {form.getFieldDecorator('PrvKey', {
         rules: [
-        {
+          {
             required: true,
             message: 'Please enter correct Private Key!'
-        },
-        {
-          validator: (rule, value, callback) => {
-            if (value.match(/^[0-9a-fA-F]{64}$/)) {
-              callback()
+          },
+          {
+            validator: (rule, value, callback) => {
+              if (value.match(/^[0-9a-fA-F]{64}$/)) {
+                callback()
                 return true
-            }
-            callback('Private Key should 64 chars long!')
+              }
+              callback('Private Key should 64 chars long!')
               return false
+            }
           }
-        }
         ]
       })(
         <Input
@@ -47,7 +47,6 @@ const PrvKeyForm = ({ form, handleSubmit }) => (
           form.validateFields(['PrvKey'], (err, data) => {
             if (err === null) {
               const value = form.getFieldValue('PrvKey')
-              console.log(value)
               handleSubmit(value)
             }
           })

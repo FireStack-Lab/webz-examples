@@ -1,31 +1,32 @@
 import Webz from 'webz.js'
+import CryptoJS from 'crypto-js'
 
 class ZilService {
   constructor(nodeUrl) {
     this.nodeUrl = nodeUrl
     this.Webz = this.init(nodeUrl)
   }
-
   // initialize WebzNode
-  init = nodeUrl => new Webz({ nodeUrl })
+  // init = nodeUrl => new Webz({ nodeUrl })
+  init = nodeUrl => new Webz(nodeUrl)
 
   // aesEncrypt
-  aesEncrypt = (data, key, iv) => {
-    const result = this.Webz.util.aes.encipher(
-      Buffer.alloc(data.toString().length, data.toString()),
-      Buffer.alloc(32, key),
-      Buffer.alloc(16, iv)
-    )
-    return result
+  aesEncrypt = (data, key) => {
+    const ciphertext = CryptoJS.AES.encrypt(data, key, {
+      iv: CryptoJS.enc.Hex.parse(0),
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+    })
+    return ciphertext.toString()
   }
-  // aesEncrypt
-  aesDecrypt = (data, key, iv) => {
-    const result = this.Webz.util.aes.decipher(
-      data,
-      Buffer.alloc(32, key),
-      Buffer.alloc(16, iv)
-    )
-    return result
+  // aesDecrypt
+  aesDecrypt = (data, key) => {
+    var decrypted = CryptoJS.AES.decrypt(data, key, {
+      iv: CryptoJS.enc.Hex.parse(0),
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+    })
+    return decrypted.toString(CryptoJS.enc.Utf8) //WordArray对象转utf8字符串
   }
 
   // generate private key
@@ -65,7 +66,13 @@ class ZilService {
   // node apis
   // get connected node
   node = () => {
-    const result = this.Webz.getNode()
+    const result = this.Webz.getProvider()
+    return result
+  }
+
+  httpProvider = async () => {
+    await this.Webz.setProvider('https://api-scilla.zilliqa.com')
+    const result = await this.Webz.zil.isConnected()
     return result
   }
 
@@ -77,57 +84,62 @@ class ZilService {
 
   // get node isConnected boolean
   isConnected = async () => {
-    const result = await this.node().isConnected()
+    const result = await this.Webz.isConnected()
     return result !== null ? true : false
   }
 
   // get networkId from node
   networkId = async () => {
-    const result = await this.node().getNetworkId()
+    const result = await this.Webz.zil.getNetworkId()
     return result
   }
 
   // get Balance
   getBalance = async address => {
-    const result = await this.node().getBalance({ address })
+    const result = await this.Webz.zil.getBalance({ address })
+
     return result
   }
 
   // get transaction
   getTransaction = async txHash => {
-    const result = await this.node().getTransaction({ txHash })
+    const result = await this.Webz.zil.getTransaction({ txHash })
     return result
   }
 
   // get txBlock
   getTxBlock = async blockNumber => {
-    const result = await this.node().getTxBlock({ blockNumber })
+    // const result = await this.node().getTxBlock({ blockNumber })
+    const result = await this.Webz.zil.getTxBlock({ blockNumber })
+
     return result
   }
 
   // get dsBlock
   getDsBlock = async blockNumber => {
-    const result = await this.node().getDsBlock({ blockNumber })
+    // const result = await this.node().getDsBlock({ blockNumber })
+    const result = await this.Webz.zil.getDsBlock({ blockNumber })
     return result
   }
 
   // get SmartContracts
   getSmartContracts = async address => {
-    const result = await this.node().getSmartContracts({ address })
+    const result = await this.Webz.zil.getSmartContracts({ address })
     return result
   }
 
   // createTransaction
   createTransaction = async txnJson => {
-    const result = await this.node().createTransaction(txnJson)
+    const result = await this.Webz.zil.createTransaction(txnJson)
     return result
   }
 
   // getTransactionHistory
   getTransactionHistory = async address => {
-    const result = await this.node().getTransactionHistory({ address })
+    const result = await this.Webz.zil.getTransactionHistory({ address })
     return result
   }
+  // HttpProvider
 }
 
 export default ZilService

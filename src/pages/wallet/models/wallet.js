@@ -7,7 +7,7 @@ const apis = {
   testNet: 'https://api-scilla.zilliqa.com',
   main: 'https://lookupv2.zilliqa.com/'
 }
-const apiUrl = apis.testRpc
+const apiUrl = apis.testNet
 
 const webz = new Webz(apiUrl)
 
@@ -84,13 +84,8 @@ export default {
     },
     *saveToLocalWallets({ payload }, { call, put }) {
       const { prvKey, pubKey, address, walletName, walletPassWord } = payload
-      const encryptPrvKey = yield call(
-        webz.aesEncrypt,
-        prvKey,
-        walletPassWord,
-        0
-      )
-
+      const encryptPrvKey = yield call(webz.aesEncrypt, prvKey, walletPassWord)
+      console.log(encryptPrvKey)
       const saveLocalWalletObject = {
         prvKey: encryptPrvKey,
         pubKey,
@@ -115,9 +110,10 @@ export default {
       const walletKey = `webz_wallet_id_${from}`
 
       const localWallet = yield call(readObject, walletKey)
-      const localWalletBuffer = Buffer.from(localWallet.prvKey)
+      // const localWalletBuffer = Buffer.from(localWallet.prvKey)
       // console.log(localWalletBuffer)
-      const outputAes = yield call(webz.aesDecrypt, localWalletBuffer, psw, 0)
+      const outputAes = yield call(webz.aesDecrypt, localWallet.prvKey, psw)
+      console.log({ outputAes })
       let prvKey
       if (outputAes) {
         prvKey = outputAes.toString()
@@ -125,7 +121,7 @@ export default {
         const balanceInfo = yield call(webz.getBalance, from)
         const checkedTxnDetails = {
           ...txnDetails,
-          nonce: balanceInfo.nonce
+          nonce: balanceInfo.nonce + 1
           // should be edited to below after kaya upgrated
           // nonce: balanceInfo.nonce + 1
         }
@@ -137,12 +133,13 @@ export default {
 
     *doneTransaction({ payload }, { call, put }) {
       const { txnJson, from } = payload
-      // console.log(txnJson)
+      console.log(txnJson)
       const txnId = yield call(webz.createTransaction, txnJson)
-      // console.log(txnId)
+      console.log(txnId)
       if (txnId) {
         const txnDate = new Date()
-        const { result } = txnId
+        const result = txnId
+        //const { result } = txnId
         if (typeof result === 'string' && result.match(/^[0-9a-fA-F]{64}$/)) {
           const newTxnObject = Object.assign({}, txnJson, {
             txnId: result,
@@ -153,11 +150,7 @@ export default {
           })
           // console.log({ txnId, txnJson })
 
-          yield call(
-            writeObject,
-            `transaction_id_${txnId.result}`,
-            newTxnObject
-          )
+          yield call(writeObject, `transaction_id_${result}`, newTxnObject)
         }
       }
     },

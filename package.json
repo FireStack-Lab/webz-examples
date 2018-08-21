@@ -21,11 +21,14 @@
     "start": "umi dev",
     "build": "umi build",
     "lint": "eslint --ext .js src test",
-    "precommit": "npm run lint"
+    "precommit": "npm run lint",
+    "reboot": "yarn upgrade webz.js&&yarn start"
   },
   "dependencies": {
     "@react-pdf/renderer": "^1.0.0-alpha.12",
+    "crypto-js": "^3.1.9-1",
     "dva": "^2.1.0",
+    "react-ace": "^6.1.4",
     "umi": "^1.0.0-0",
     "umi-plugin-dva": "^0.1.5",
     "webz.js": "github:FireStack-Lab/webz.js"

@@ -20,20 +20,20 @@ const DsBlockForm = ({ form, handleSubmit }) => (
     <FormItem>
       {form.getFieldDecorator('DsBlockNumber', {
         rules: [
-        {
+          {
             required: true,
             message: 'Please enter correct DsBlockNumber!'
-        },
-        {
-          validator: (rule, value, callback) => {
-            if (value.match(/^[0-9]/)) {
-              callback()
+          },
+          {
+            validator: (rule, value, callback) => {
+              if (value.match(/^[0-9]/)) {
+                callback()
                 return true
-            }
-            callback('DsBlockNumber should be numbers!')
+              }
+              callback('DsBlockNumber should be numbers!')
               return false
+            }
           }
-        }
         ]
       })(
         <Input

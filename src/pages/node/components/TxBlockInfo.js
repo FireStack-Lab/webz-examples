@@ -20,20 +20,20 @@ const TxBlockForm = ({ form, handleSubmit }) => (
     <FormItem>
       {form.getFieldDecorator('TxBlockNumber', {
         rules: [
-        {
+          {
             required: true,
             message: 'Please enter correct TxBlockNumber!'
-        },
-        {
-          validator: (rule, value, callback) => {
-            if (value.match(/^[0-9]/)) {
-              callback()
+          },
+          {
+            validator: (rule, value, callback) => {
+              if (value.match(/^[0-9]/)) {
+                callback()
                 return true
-            }
-            callback('TxBlockNumber should be numbers!')
+              }
+              callback('TxBlockNumber should be numbers!')
               return false
+            }
           }
-        }
         ]
       })(
         <Input

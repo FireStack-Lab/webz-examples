@@ -6,7 +6,7 @@ const apis = {
   testNet: 'https://api-scilla.zilliqa.com',
   main: 'https://lookupv2.zilliqa.com/'
 }
-const apiUrl = apis.testRpc
+const apiUrl = apis.testNet
 
 const webz = new Webz(apiUrl)
 
@@ -81,7 +81,6 @@ export default {
       const { address } = payload
 
       const getBalance = yield call(webz.getBalance, address)
-
       if (getBalance) {
         yield put({
           type: 'updateState',

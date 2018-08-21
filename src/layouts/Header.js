@@ -19,6 +19,11 @@ function Header({ location }) {
           <Icon type="wallet" />wallet
         </Link>
       </Menu.Item>
+      <Menu.Item key="/contract">
+        <Link to="/contract">
+          <Icon type="code" />contract
+        </Link>
+      </Menu.Item>
       <Menu.Item key="/docs">
         <a href="//scilla-lang.org" target="_blank" rel="noopener noreferrer">
           Docs

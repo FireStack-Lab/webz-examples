@@ -65,7 +65,7 @@ const TransactionForm = ({
             <InputNumber
               // defaultValue={0}
               min={1}
-              max={balance}
+              max={balance ? parseInt(balance, 10) : undefined}
               step={1}
               size="large"
               placeholder="Amount that less than Balance"
@@ -103,7 +103,7 @@ const TransactionForm = ({
             <InputNumber
               // defaultValue={1}
               min={1}
-              max={balance}
+              max={balance ? parseInt(balance, 10) : undefined}
               step={1}
               size="large"
               placeholder="Gas Limit that nodes will process"
